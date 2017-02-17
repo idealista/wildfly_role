@@ -40,4 +40,3 @@
     state: link
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
-

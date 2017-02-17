@@ -12,7 +12,6 @@ This Ansible role installs a Wildfly server in a Debian environment. Based on th
 - [Versioning](#versioning)
 - [Authors](#authors)
 - [License](#license)
-- [Contributing](#contributing)
 
 ## Getting Started
 

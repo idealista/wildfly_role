@@ -1,2 +1,4 @@
 .molecule
 .vagrant
+.cache/
+tests/__pycache__/

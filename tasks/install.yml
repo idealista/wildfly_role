@@ -1,0 +1,43 @@
+---
+
+- name: WildFly | Ensure WildFly group exists
+  group:
+    name: "{{ wildfly_group }}"
+
+- name: WildFly | Ensure WildFly user exists
+  user:
+    name: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    home: /bin/false
+    createhome: yes
+
+- name: WildFly | Download WildFly binaries
+  get_url:
+    url: "{{ wildfly_url }}"
+    dest: "/tmp/{{ wildfly_package }}"
+  register: download_wildfly
+
+- name: WildFly | Extract WildFly in the current directory
+  shell: "tar -xzvf /tmp/{{ wildfly_package }} -C {{ wildfly_install_dir }}"
+  args:
+    chdir: /tmp
+  when: download_wildfly|changed
+  tags:
+   skip_ansible_lint
+
+- name: WildFly | Change owner of WildFly full dir recursively
+  file:
+    path: "{{ wildfly_full_dir }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    recurse: yes
+
+- name: WildFly | Create Symlink to WildFly full dir
+  file:
+    src: "{{ wildfly_full_dir }}"
+    dest: "{{ wildfly_dir }}"
+    state: link
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+

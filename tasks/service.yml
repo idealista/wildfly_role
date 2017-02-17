@@ -1,0 +1,28 @@
+---
+
+- name: WildFly | Ensure WildFly service conf dest folder exists
+  file:
+    path: "/etc/wildfly/"
+    state: directory
+
+- name: WildFly | Copy necessary systemd files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    remote_src: yes
+  with_items:
+    - { src: "{{ wildfly_dir }}/docs/contrib/scripts/systemd/launch.sh", dest: "/opt/wildfly/bin/launch.sh" }
+    - { src: "{{ wildfly_dir }}/docs/contrib/scripts/systemd/wildfly.conf", dest: "/etc/wildfly/wildfly.conf" }
+    - { src: "{{ wildfly_dir }}/docs/contrib/scripts/systemd/wildfly.service", dest: "/etc/systemd/system/wildfly.service" }
+
+- name: WildFly | Execution mode for launch script
+  file:
+    path: "/opt/wildfly/bin/launch.sh"
+    mode: 0755
+
+- name: WildFly | Start service
+  systemd:
+    name: wildfly
+    state: "{{ wildfly_service_state }}"
+    enabled: "{{ wildfly_service_enabled }}"
+    daemon_reload: yes

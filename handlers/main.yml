@@ -1,0 +1,7 @@
+---
+# handlers file for WildFly
+- name: restart WildFly
+  service:
+    name: "{{ wildfly_package }}"
+    state: restarted
+    use: service

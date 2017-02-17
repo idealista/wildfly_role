@@ -1,0 +1,6 @@
+---
+
+- hosts: all
+  roles:
+    - role: java
+    - role: wildfly-role

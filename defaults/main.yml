@@ -1,0 +1,18 @@
+---
+wildfly_version: '10.1.0.Final'
+wildfly_version_build_name: wildfly-{{ wildfly_version }}
+wildfly_package: "{{ wildfly_version_build_name }}.tgz"
+wildfly_url: "http://download.jboss.org/wildfly/{{ wildfly_version }}/wildfly-{{ wildfly_version }}.tar.gz"
+
+wildfly_install_dir: "/opt"
+wildfly_full_dir: "{{ wildfly_install_dir }}/{{ wildfly_version_build_name }}"
+wildfly_dir: "{{ wildfly_install_dir }}/wildfly"
+
+wildfly_user: "wildfly"
+wildfly_group: "wildfly"
+
+# start on boot
+wildfly_service_enabled: yes
+
+# current state: started, stopped
+wildfly_service_state: started

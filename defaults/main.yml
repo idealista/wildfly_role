@@ -9,7 +9,10 @@ wildfly_full_dir: "{{ wildfly_install_dir }}/{{ wildfly_version_build_name }}"
 wildfly_dir: "{{ wildfly_install_dir }}/wildfly"
 
 wildfly_user: "wildfly"
-wildfly_group: "wildfly"
+wildfly_user_home: "/home/{{ wildfly_user }}"
+wildfly_user_group: "wildfly"
+wildfly_user_shell: "/bin/sh"
+wildfly_user_uid: 1001
 
 # start on boot
 wildfly_service_enabled: yes

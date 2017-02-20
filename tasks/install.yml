@@ -1,16 +1,5 @@
 ---
 
-- name: WildFly | Ensure WildFly group exists
-  group:
-    name: "{{ wildfly_group }}"
-
-- name: WildFly | Ensure WildFly user exists
-  user:
-    name: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
-    home: /bin/false
-    createhome: yes
-
 - name: WildFly | Download WildFly binaries
   get_url:
     url: "{{ wildfly_url }}"
@@ -30,7 +19,7 @@
     path: "{{ wildfly_full_dir }}"
     state: directory
     owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
+    group: "{{ wildfly_user_group }}"
     recurse: yes
 
 - name: WildFly | Create Symlink to WildFly full dir
@@ -39,4 +28,4 @@
     dest: "{{ wildfly_dir }}"
     state: link
     owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
+    group: "{{ wildfly_user_group }}"

@@ -24,3 +24,10 @@ def test_wildfly_service(File, Service, Socket, AnsibleVars):
     assert Service("wildfly").is_enabled
     assert Service("wildfly").is_running
     # assert Socket("tcp://:::" + str(port)).is_listening
+
+
+def test_wildfly_user_creation(User, AnsibleVars):
+    assert User("wildfly").group == "wildfly"
+    assert User("wildfly").home == "/home/wildfly"
+    assert User("wildfly").shell == "/bin/sh"
+    assert User("wildfly").uid == 1001

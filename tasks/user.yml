@@ -1,0 +1,13 @@
+---
+- name: WildFly | Ensure WildFly group exists
+  group:
+    name: "{{ wildfly_user_group }}"
+    
+- name: Wildfly | Ensure WildFly user exists
+  user:
+    name: "{{ wildfly_user }}"
+    shell: "{{ wildfly_user_shell }}"
+    home: "{{ wildfly_user_home }}"
+    uid: "{{ wildfly_user_uid }}"
+    createhome: yes
+    state: present

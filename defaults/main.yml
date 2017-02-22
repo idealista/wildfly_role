@@ -12,7 +12,7 @@ wildfly_user: "wildfly"
 wildfly_user_home: "/home/{{ wildfly_user }}"
 wildfly_user_group: "wildfly"
 wildfly_user_shell: "/bin/sh"
-wildfly_user_uid: 1002
+wildfly_user_uid: 1005
 
 # start on boot
 wildfly_service_enabled: yes

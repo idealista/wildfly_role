@@ -1,31 +1,40 @@
 ---
 
+- name: WildFly | Ensure WildFly group exists
+  group:
+    name: "{{ wildfly_group }}"
+
+- name: Wildfly | Ensure WildFly user exists
+  user:
+    name: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    shell: "{{ wildfly_user_shell }}"
+    createhome: yes
+    home: "{{ wildfly_user_home }}"
+    uid: "{{ wildfly_user_uid }}"
+    state: present
+
 - name: WildFly | Download WildFly binaries
   get_url:
     url: "{{ wildfly_url }}"
     dest: "/tmp/{{ wildfly_package }}"
   register: download_wildfly
 
-- name: WildFly | Extract WildFly in the current directory
-  shell: "tar -xzvf /tmp/{{ wildfly_package }} -C {{ wildfly_install_dir }}"
-  args:
-    chdir: /tmp
-  when: download_wildfly|changed
-  tags:
-   skip_ansible_lint
-
-- name: WildFly | Change owner of WildFly full dir recursively
-  file:
-    path: "{{ wildfly_full_dir }}"
-    state: directory
+- name: WildFly | Extract wildfly in the install directory
+  unarchive:
+    copy: no
+    src: "/tmp/{{ wildfly_package }}"
+    dest: "{{ wildfly_install_path }}"
     owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_user_group }}"
-    recurse: yes
+    group: "{{ wildfly_group }}"
+  when: download_wildfly|changed
 
-- name: WildFly | Create Symlink to WildFly full dir
+- name: WildFly | Create Symlink to WildFly
   file:
-    src: "{{ wildfly_full_dir }}"
-    dest: "{{ wildfly_dir }}"
+    src: "{{ wildfly_install_path }}/{{ wildfly_package_name }}"
+    dest: "{{ wildfly_install_path }}/wildfly"
     state: link
     owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_user_group }}"
+    group: "{{ wildfly_group }}"
+    force: True
+  when: download_wildfly|changed

@@ -1,7 +1,7 @@
 ---
 # handlers file for WildFly
 - name: restart WildFly
-  service:
-    name: "{{ wildfly_package }}"
+  systemd:
+    name: wildfly
     state: restarted
-    use: service
+  when: wildfly_service_state != 'stopped'

@@ -1,21 +1,25 @@
 ---
-wildfly_version: '10.1.0.Final'
-wildfly_version_build_name: wildfly-{{ wildfly_version }}
-wildfly_package: "{{ wildfly_version_build_name }}.tgz"
-wildfly_url: "http://download.jboss.org/wildfly/{{ wildfly_version }}/wildfly-{{ wildfly_version }}.tar.gz"
+## General
 
-wildfly_install_dir: "/opt"
-wildfly_full_dir: "{{ wildfly_install_dir }}/{{ wildfly_version_build_name }}"
-wildfly_dir: "{{ wildfly_install_dir }}/wildfly"
+wildfly_version: "10.1.0.Final"
 
-wildfly_user: "wildfly"
+## Service options
+
+# Owner
+wildfly_user: wildfly
+wildfly_group: wildfly
 wildfly_user_home: "/home/{{ wildfly_user }}"
-wildfly_user_group: "wildfly"
 wildfly_user_shell: "/bin/sh"
 wildfly_user_uid: 1005
 
 # start on boot
-wildfly_service_enabled: yes
-
+wildfly_service_enabled: True
 # current state: started, stopped
 wildfly_service_state: started
+
+# Files & Paths
+wildfly_install_path: "/opt"
+wildfly_conf_path: "/etc/wildfly"
+
+# Network
+wildfly_bind: 0.0.0.0

@@ -1,0 +1,44 @@
+---
+
+- name: WildFly | Create WildFly config paths
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    recurse: yes
+  with_items:
+    - "{{ wildfly_conf_path }}"
+
+- name: Wildfly | Copy wildfly config
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.permissions }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  with_items:
+    - { src: "wildfly.conf.j2",
+        dest: "{{ wildfly_conf_path }}/wildfly.conf",
+        permissions: "0640" }
+  notify: restart WildFly
+
+- name: WildFly | Copy local files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.permissions }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    remote_src: yes
+  with_items:
+    - { src: "{{ wildfly_home_path }}/docs/contrib/scripts/systemd/launch.sh",
+       dest: "{{ wildfly_home_path }}/bin/launch.sh",
+       permissions: "0755" }
+
+- name: Wildfly | Copy Daemon script
+  template:
+    src: wildfly.service.j2
+    dest: /lib/systemd/system/wildfly.service
+    mode: 0644
+  notify: restart WildFly

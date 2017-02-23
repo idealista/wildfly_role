@@ -1,3 +1,8 @@
 ---
-wildfly_version: '10.1.0.Final'
-wildfly_port: 8080
+wildfly_version: 10.1.0.Final
+
+wildfly_user: wildfly
+wildfly_user_home: /home/wildfly
+wildfly_group: wildfly
+wildfly_user_shell: /bin/sh
+wildfly_user_uid: 1005

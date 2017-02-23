@@ -1,7 +1,16 @@
 ---
 
-- include: user.yml
+- name: Wildfly | Install
+  include: install.yml
+  tags:
+    - install
 
-- include: install.yml
+- name: Wildfly | Configure
+  include: config.yml
+  tags:
+    - configure
 
-- include: service.yml
+- name: Wildfly | Service
+  include: service.yml
+  tags:
+    - service

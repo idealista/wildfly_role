@@ -1,0 +1,7 @@
+---
+
+wildfly_package_name: "wildfly-{{ wildfly_version }}"
+wildfly_package: "{{ wildfly_package_name }}.tar.gz"
+wildfly_url: "http://download.jboss.org/wildfly/{{ wildfly_version }}/{{ wildfly_package }}"
+
+wildfly_home_path: "{{ wildfly_install_path }}/wildfly"

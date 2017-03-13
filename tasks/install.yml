@@ -21,8 +21,6 @@
   register: wildfly_check
   changed_when: false
   ignore_errors: true
-  when:
-    - wildfly_management_users | length > 0
 
 - name: WildFly | Download WildFly binaries
   get_url:

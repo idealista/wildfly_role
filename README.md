@@ -1,5 +1,6 @@
-WildFly Role
-============
+![Logo](logo.gif)
+
+# WildFly Ansible role
 
 This Ansible role installs a Wildfly server in a Debian environment. Based on the instructions present in [this GitHub Gist](https://gist.github.com/sukharevd/6087988).
 

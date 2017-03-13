@@ -14,11 +14,21 @@
     uid: "{{ wildfly_user_uid }}"
     state: present
 
+- name: Wildfly | Check installed version
+  command: >
+    {{wildfly_home_path}}/bin/jboss-cli.sh -c --command=":read-attribute(name=product-version)"
+    --user={{ wildfly_management_users.0.name }} --password={{wildfly_management_users.0.password}}
+  register: wildfly_check
+  changed_when: false
+  ignore_errors: true
+  when:
+    - wildfly_management_users | length > 0
+
 - name: WildFly | Download WildFly binaries
   get_url:
     url: "{{ wildfly_url }}"
     dest: "/tmp/{{ wildfly_package }}"
-  register: download_wildfly
+  when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout
 
 - name: WildFly | Extract wildfly in the install directory
   unarchive:
@@ -27,7 +37,7 @@
     dest: "{{ wildfly_install_path }}"
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
-  when: download_wildfly|changed
+  when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout
 
 - name: WildFly | Create Symlink to WildFly
   file:
@@ -37,4 +47,4 @@
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
     force: True
-  when: download_wildfly|changed
+  when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout

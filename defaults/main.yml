@@ -20,6 +20,10 @@ wildfly_service_state: started
 # Files & Paths
 wildfly_install_path: "/opt"
 wildfly_conf_path: "/etc/wildfly"
+wildfly_home_path: "{{ wildfly_install_path }}/wildfly"
 
 # Network
 wildfly_bind: 0.0.0.0
+
+# Management
+wildfly_management_users: []

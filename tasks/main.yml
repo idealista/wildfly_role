@@ -10,6 +10,11 @@
   tags:
     - configure
 
+- name: Wildfly | Users
+  include: users.yml
+  tags:
+    - users
+
 - name: Wildfly | Service
   include: service.yml
   tags:

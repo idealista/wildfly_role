@@ -1,0 +1,11 @@
+---
+
+- name: WildFly | Create management users
+  shell: >
+    {{ wildfly_home_path }}/bin/add-user.sh -s {{ item.name }} {{ item.password }} &&
+    touch {{ wildfly_home_path }}/.mgmt-users.{{ item.name }}.provisioned
+  with_items: "{{ wildfly_management_users }}"
+  args:
+    creates: "{{ wildfly_home_path }}/.mgmt-users.{{ item.name }}.provisioned"
+  when: wildfly_management_users | length > 0
+  no_log: true

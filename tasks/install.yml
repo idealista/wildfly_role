@@ -18,6 +18,8 @@
   command: >
     {{wildfly_home_path}}/bin/jboss-cli.sh -c --command=":read-attribute(name=product-version)"
     --user={{ wildfly_management_users.0.name }} --password={{wildfly_management_users.0.password}}
+  become: yes
+  become_user: "{{ wildfly_user }}"
   register: wildfly_check
   changed_when: false
   ignore_errors: true
@@ -46,3 +48,10 @@
     group: "{{ wildfly_group }}"
     force: True
   when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout
+
+- name: WildFly | Create log path
+  file:
+    path: "{{ wildfly_log_file_path }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"

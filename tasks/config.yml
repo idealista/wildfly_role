@@ -21,6 +21,9 @@
     - { src: "wildfly.conf.j2",
         dest: "{{ wildfly_conf_path }}/wildfly.conf",
         permissions: "0640" }
+    - { src: "standalone.xml.j2",
+        dest: "{{ wildfly_home_path }}/standalone/configuration/standalone.xml",
+        permissions: "0644" }
   notify: restart WildFly
 
 - name: WildFly | Copy local files

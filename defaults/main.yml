@@ -21,6 +21,16 @@ wildfly_service_state: started
 wildfly_install_path: "/opt"
 wildfly_conf_path: "/etc/wildfly"
 wildfly_home_path: "{{ wildfly_install_path }}/wildfly"
+wildfly_log_file_path: "{{ wildfly_home_path }}/standalone/log"
+
+# Log
+wildfly_log_file_name: server.log
+wildfly_log_console_enabled: "false"
+wildfly_log_console_level: INFO
+wildfly_log_file_enabled: "true"
+wildfly_log_file_level: INFO
+wildfly_log_file_rotatesize: 1024000
+wildfly_log_file_maxBackupIndex: 7
 
 # Network
 wildfly_bind: 0.0.0.0

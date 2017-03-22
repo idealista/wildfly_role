@@ -14,6 +14,13 @@
     uid: "{{ wildfly_user_uid }}"
     state: present
 
+- name: Wildfly | Check if service is running
+  command: systemctl status wildfly.service
+  ignore_errors: yes
+  changed_when: false
+  no_log: true
+  register: service_wildfly_status
+
 - name: Wildfly | Check installed version
   command: >
     {{wildfly_home_path}}/bin/jboss-cli.sh -c --command=":read-attribute(name=product-version)"
@@ -23,12 +30,18 @@
   register: wildfly_check
   changed_when: false
   ignore_errors: true
+  no_log: true
+  when: service_wildfly_status | success
 
 - name: WildFly | Download WildFly binaries
   get_url:
     url: "{{ wildfly_url }}"
     dest: "/tmp/{{ wildfly_package }}"
-  when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout
+  when: |
+      "Loaded: not-loaded" in service_wildfly_status.stdout or
+      service_wildfly_status | success and
+        (wildfly_check | failed or
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
 
 - name: WildFly | Extract wildfly in the install directory
   unarchive:
@@ -37,7 +50,11 @@
     dest: "{{ wildfly_install_path }}"
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
-  when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout
+  when: |
+      "Loaded: not-loaded" in service_wildfly_status.stdout or
+      service_wildfly_status | success and
+        (wildfly_check | failed or
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
 
 - name: WildFly | Create Symlink to WildFly
   file:
@@ -47,7 +64,11 @@
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
     force: True
-  when: wildfly_check|failed or "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout
+  when: |
+      "Loaded: not-loaded" in service_wildfly_status.stdout or
+      service_wildfly_status | success and
+        (wildfly_check | failed or
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
 
 - name: WildFly | Create log path
   file:

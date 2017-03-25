@@ -38,7 +38,7 @@
     url: "{{ wildfly_url }}"
     dest: "/tmp/{{ wildfly_package }}"
   when: |
-      "Loaded: not-loaded" in service_wildfly_status.stdout or
+      "Loaded: not-found" in service_wildfly_status.stdout or
       service_wildfly_status | success and
         (wildfly_check | failed or
         "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
@@ -51,7 +51,7 @@
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
   when: |
-      "Loaded: not-loaded" in service_wildfly_status.stdout or
+      "Loaded: not-found" in service_wildfly_status.stdout or
       service_wildfly_status | success and
         (wildfly_check | failed or
         "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
@@ -65,7 +65,7 @@
     group: "{{ wildfly_group }}"
     force: True
   when: |
-      "Loaded: not-loaded" in service_wildfly_status.stdout or
+      "Loaded: not-found" in service_wildfly_status.stdout or
       service_wildfly_status | success and
         (wildfly_check | failed or
         "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)

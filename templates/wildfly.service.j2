@@ -9,7 +9,7 @@ EnvironmentFile=-{{ wildfly_conf_path }}/wildfly.conf
 User={{ wildfly_user }}
 LimitNOFILE=102642
 PIDFile=/var/run/wildfly/wildfly.pid
-ExecStart={{ wildfly_home_path }}/bin/launch.sh $WILDFLY_MODE $WILDFLY_CONFIG $WILDFLY_BIND
+ExecStart={{ wildfly_home_path }}/bin/launch.sh $WILDFLY_MODE $WILDFLY_CONFIG $WILDFLY_BIND $RUN_CONF
 StandardOutput=null
 
 [Install]

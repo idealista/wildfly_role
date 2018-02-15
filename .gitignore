@@ -3,3 +3,4 @@
 .cache/
 tests/__pycache__/
 tests/playbook.retry
+.python-version

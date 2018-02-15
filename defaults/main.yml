@@ -18,10 +18,15 @@ wildfly_service_enabled: True
 wildfly_service_state: started
 
 # Files & Paths
-wildfly_install_path: "/opt"
 wildfly_conf_path: "/etc/wildfly"
+wildfly_install_path: "/opt"
 wildfly_home_path: "{{ wildfly_install_path }}/wildfly"
 wildfly_log_file_path: "{{ wildfly_home_path }}/standalone/log"
+wildfly_running_configuration_file: "{{ wildfly_home_path }}/bin/standalone.conf"
+
+# Allowing playbooks to provide external config files&templates
+wildfly_extra_conf_path: "{{ playbook_dir }}/files/wildfly/conf"
+wildfly_extra_conf_template_path: "{{ playbook_dir }}/templates/wildfly/conf"
 
 # Log
 wildfly_log_file_name: server.log

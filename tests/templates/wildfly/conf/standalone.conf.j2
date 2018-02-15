@@ -1,0 +1,47 @@
+## -*- shell-script -*- ######################################################
+##                                                                          ##
+##  JBoss Bootstrap Script Configuration                                    ##
+##                                                                          ##
+##############################################################################
+
+#
+# This file is optional; it may be removed if not needed.
+#
+
+#
+# Specify the maximum file descriptor limit, use "max" or "maximum" to use
+# the default, as queried by the system.
+#
+# Defaults to "maximum"
+#
+MAX_FD="maximum"
+
+#
+# Specify the profiler configuration file to load.
+#
+# Default is to not load profiler configuration file.
+#
+#PROFILER=""
+
+#
+# Specify the location of the Java home directory.  If set then $JAVA will
+# be defined to $JAVA_HOME/bin/java, else $JAVA will be "java".
+#
+#JAVA_HOME="/opt/java/jdk"
+
+#
+# Specify the exact Java VM executable to use.
+#
+#JAVA=""
+
+if [ "x$JBOSS_MODULES_SYSTEM_PKGS" = "x" ]; then
+   JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman"
+fi
+
+# Uncomment the following line to prevent manipulation of JVM options
+# by shell scripts.
+#
+PRESERVE_JAVA_OPTS=true
+
+# Sample JAVA_OPTS setting Xms/Xmx
+JAVA_OPTS="$JAVA_OPTS -Xms512m -Xmx512m"

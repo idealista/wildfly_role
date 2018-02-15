@@ -1,15 +1,13 @@
 ---
 galaxy_info:
-  company: Idealista S.A.
+  company: Idealista S.A.U.
   description: wildfly role to install and configure this server
-  min_ansible_version: 2.2
+  min_ansible_version: 2.4.0.0
   license: Apache 2.0
   platforms:
     - name: Debian
       versions:
         - jessie
+        - stretch
   categories:
     - container
-
-dependencies:
-  - idealista.java-role

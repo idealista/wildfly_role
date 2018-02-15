@@ -38,6 +38,43 @@
     - { src: "{{ wildfly_home_path }}/docs/contrib/scripts/systemd/launch.sh",
        dest: "{{ wildfly_home_path }}/bin/launch.sh",
        permissions: "0755" }
+  notify: restart WildFly
+
+- name: WildFly | Ensure extra wildfly config file and template paths exists
+  file:
+    path: "{{ wildfly_conf_path }}/{{ item.path }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0640
+  with_filetree:
+    - "{{ wildfly_extra_conf_path }}/"
+    - "{{ wildfly_extra_conf_template_path }}/"
+  when: item.state == "directory"
+
+- name: WildFly | Copy extra wildfly config files (provided by playbooks)
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ wildfly_conf_path }}/{{ item.path }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0640
+  with_filetree:
+    - "{{ wildfly_extra_conf_path }}/"
+  when: item.state == "file"
+  notify: restart WildFly
+
+- name: WildFly | Copy extra wildfly config templates (provided by playbooks)
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ wildfly_conf_path }}/{{ item.path | splitext | first }}"  # This is to remove .j2 extension
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0640
+  with_filetree:
+    - "{{ wildfly_extra_conf_template_path }}/"
+  when: item.state == "file"
+  notify: restart WildFly
 
 - name: Wildfly | Copy Daemon script
   template:

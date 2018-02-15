@@ -6,8 +6,11 @@ wildfly_user_home: /home/wildfly
 wildfly_group: wildfly
 wildfly_user_shell: /bin/sh
 wildfly_user_uid: 1005
+
 wildfly_log_file_path: "/var/log/wildfly"
 wildfly_log_file_name: wildfly.log
+
+wildfly_running_configuration_file: "{{ wildfly_conf_path }}/standalone.conf"
 
 wildfly_management_users:
   - {

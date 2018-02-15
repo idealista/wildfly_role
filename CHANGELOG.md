@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a ch
 
 ## [Unreleased](https://github.com/idealista-tech/wildfly-role/tree/develop)
 
+### Added
+- *[#15](https://github.com/idealista-tech/wildfly-role/issues/15) Configure JVM settings using standalone file template* @dortegau
+
 ## [1.1.2](https://github.com/idealista-tech/wildfly-role/tree/1.1.2) (2017-03-25)
 [Full Changelog](https://github.com/idealista-tech/wildfly-role/compare/1.1.1...1.1.2)
 

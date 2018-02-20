@@ -10,7 +10,7 @@
   with_items:
     - "{{ wildfly_conf_path }}"
 
-- name: Wildfly | Copy wildfly config
+- name: WildFly | Copy wildfly config
   template:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
@@ -76,7 +76,7 @@
   when: item.state == "file"
   notify: restart WildFly
 
-- name: Wildfly | Copy Daemon script
+- name: WildFly | Copy Daemon script
   template:
     src: wildfly.service.j2
     dest: /lib/systemd/system/wildfly.service

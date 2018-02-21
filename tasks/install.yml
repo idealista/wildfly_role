@@ -4,7 +4,7 @@
   group:
     name: "{{ wildfly_group }}"
 
-- name: Wildfly | Ensure WildFly user exists
+- name: WildFly | Ensure WildFly user exists
   user:
     name: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
@@ -14,19 +14,17 @@
     uid: "{{ wildfly_user_uid }}"
     state: present
 
-- name: Wildfly | Check if service is running
+- name: WildFly | Check if service is running
   command: systemctl status wildfly.service
   ignore_errors: yes
   changed_when: false
   no_log: true
   register: service_wildfly_status
 
-- name: Wildfly | Check installed version
+- name: WildFly | Check installed version
   command: >
-    {{wildfly_home_path}}/bin/jboss-cli.sh -c --command=":read-attribute(name=product-version)"
+    {{wildfly_home_path}}/bin/jboss-cli.sh -c --commands=":read-attribute(name=product-version)"
     --user={{ wildfly_management_users.0.name }} --password={{wildfly_management_users.0.password}}
-  become: yes
-  become_user: "{{ wildfly_user }}"
   register: wildfly_check
   changed_when: false
   ignore_errors: true
@@ -39,9 +37,10 @@
     dest: "/tmp/{{ wildfly_package }}"
   when: |
       "Loaded: not-found" in service_wildfly_status.stdout or
-      service_wildfly_status | success and
+      "service could not be found" in service_wildfly_status.stderr or
+      (service_wildfly_status | success and
         (wildfly_check | failed or
-        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
 
 - name: WildFly | Extract wildfly in the install directory
   unarchive:
@@ -52,9 +51,10 @@
     group: "{{ wildfly_group }}"
   when: |
       "Loaded: not-found" in service_wildfly_status.stdout or
-      service_wildfly_status | success and
+      "service could not be found" in service_wildfly_status.stderr or
+      (service_wildfly_status | success and
         (wildfly_check | failed or
-        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
 
 - name: WildFly | Create Symlink to WildFly
   file:
@@ -66,9 +66,10 @@
     force: True
   when: |
       "Loaded: not-found" in service_wildfly_status.stdout or
-      service_wildfly_status | success and
+      "service could not be found" in service_wildfly_status.stderr or
+      (service_wildfly_status | success and
         (wildfly_check | failed or
-        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout)
+        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
 
 - name: WildFly | Create log path
   file:

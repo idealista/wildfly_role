@@ -5,6 +5,9 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a ch
 ## [Unreleased](https://github.com/idealista/wildfly-role/tree/develop)
 
 ## [1.3.0](https://github.com/idealista/wildfly-role/tree/1.3.0) (2018-02-21)
+[Full Changelog](https://github.com/idealista/wildfly-role/compare/1.2.0...1.3.0)
+
+### Added
 - *[#21](https://github.com/idealista/wildfly-role/issues/21) Added support to Debian Stretch* @dortegau
 
 ## [1.2.0](https://github.com/idealista/wildfly-role/tree/1.2.0) (2018-02-15)

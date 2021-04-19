@@ -14,6 +14,10 @@ wildfly_running_configuration_file: "{{ wildfly_conf_path }}/standalone.conf"
 
 wildfly_management_users:
   - {
-      name: admin,
-      password: admin
-    }
+    name: admin,
+    password: admin
+  }
+
+## JAVA
+java_jdk_vendor: openjdk
+java_open_jdk_version: 8u275-b01-1~deb9u1

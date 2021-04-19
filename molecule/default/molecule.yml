@@ -1,0 +1,33 @@
+---
+
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  yamllint .
+  ansible-lint .
+
+platforms:
+  - name: wildfly
+    groups:
+      - wildfly
+    image: ${MOLECULE_DISTRO:-idealista/jdk:8u252-stretch-openjdk-headless}
+    privileged: false
+    command: '/lib/systemd/systemd'
+    capabilities:
+      - SYS_ADMIN
+    volumes:
+      - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
+    tmpfs:
+      - '/run'
+      - '/run/lock'
+      - '/tmp'
+
+provisioner:
+  name: ansible
+  lint:
+    name: ansible-lint
+verifier:
+  name: ansible
+  directory: ./tests

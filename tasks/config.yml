@@ -36,8 +36,8 @@
     remote_src: yes
   with_items:
     - { src: "{{ wildfly_home_path }}/docs/contrib/scripts/systemd/launch.sh",
-       dest: "{{ wildfly_home_path }}/bin/launch.sh",
-       permissions: "0755" }
+        dest: "{{ wildfly_home_path }}/bin/launch.sh",
+        permissions: "0755" }
   notify: restart WildFly
 
 - name: WildFly | Ensure extra wildfly config file and template paths exists

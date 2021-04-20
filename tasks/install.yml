@@ -23,52 +23,41 @@
 
 - name: WildFly | Check installed version
   command: >
-    {{wildfly_home_path}}/bin/jboss-cli.sh -c --commands=":read-attribute(name=product-version)"
-    --user={{ wildfly_management_users.0.name }} --password={{wildfly_management_users.0.password}}
+    {{ wildfly_home_path }}/bin/jboss-cli.sh -c --commands=":read-attribute(name=product-version)"
+    --user={{ wildfly_management_users.0.name }} --password={{ wildfly_management_users.0.password }}
   register: wildfly_check
   changed_when: false
   ignore_errors: true
   no_log: true
-  when: service_wildfly_status | success
+  when: service_wildfly_status is success
 
-- name: WildFly | Download WildFly binaries
-  get_url:
-    url: "{{ wildfly_url }}"
-    dest: "/tmp/{{ wildfly_package }}"
+- block:
+    - name: WildFly | Download WildFly binaries
+      get_url:
+        url: "{{ wildfly_url }}"
+        dest: "/tmp/{{ wildfly_package }}"
+
+    - name: WildFly | Extract wildfly in the install directory
+      unarchive:
+        copy: no
+        src: "/tmp/{{ wildfly_package }}"
+        dest: "{{ wildfly_install_path }}"
+        owner: "{{ wildfly_user }}"
+        group: "{{ wildfly_group }}"
+
+    - name: WildFly | Create Symlink to WildFly
+      file:
+        src: "{{ wildfly_install_path }}/{{ wildfly_package_name }}"
+        dest: "{{ wildfly_install_path }}/wildfly"
+        state: link
+        owner: "{{ wildfly_user }}"
+        group: "{{ wildfly_group }}"
+        force: True
   when: |
       "Loaded: not-found" in service_wildfly_status.stdout or
       "service could not be found" in service_wildfly_status.stderr or
-      (service_wildfly_status | success and
-        (wildfly_check | failed or
-        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
-
-- name: WildFly | Extract wildfly in the install directory
-  unarchive:
-    copy: no
-    src: "/tmp/{{ wildfly_package }}"
-    dest: "{{ wildfly_install_path }}"
-    owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
-  when: |
-      "Loaded: not-found" in service_wildfly_status.stdout or
-      "service could not be found" in service_wildfly_status.stderr or
-      (service_wildfly_status | success and
-        (wildfly_check | failed or
-        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
-
-- name: WildFly | Create Symlink to WildFly
-  file:
-    src: "{{ wildfly_install_path }}/{{ wildfly_package_name }}"
-    dest: "{{ wildfly_install_path }}/wildfly"
-    state: link
-    owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
-    force: True
-  when: |
-      "Loaded: not-found" in service_wildfly_status.stdout or
-      "service could not be found" in service_wildfly_status.stderr or
-      (service_wildfly_status | success and
-        (wildfly_check | failed or
+      (service_wildfly_status is success and
+        (wildfly_check is failed or
         "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
 
 - name: WildFly | Create log path

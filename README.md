@@ -1,6 +1,6 @@
-![Logo](logo.gif)
+![Logo](https://raw.githubusercontent.com/idealista/wildfly-role/master/logo.gif)
 
-# WildFly Ansible role
+# WildFly Ansible Role [![Build Status](https://travis-ci.com/idealista/wildfly-role.png)](https://travis-ci.com/idealista/wildfly-role)
 
 This Ansible role installs a WildFly server in a Debian environment. Based on the instructions present in [this GitHub Gist](https://gist.github.com/sukharevd/6087988).
 
@@ -20,10 +20,12 @@ These instructions will get you a copy of the role for your Ansible Playbook. On
 
 ### Prerequisities
 
-Ansible 2.3.1.0 version installed.
+For compatible Ansible versions check [.travis.yml](.travis.yml).
 Inventory destination should be a Debian environment.
 
-For testing purposes, [Molecule](https://molecule.readthedocs.io/) with [Vagrant](https://www.vagrantup.com/) as driver (with [vagrant-hostmanager](https://github.com/devopsgroup-io/vagrant-hostmanager)) and [VirtualBox](https://www.virtualbox.org/) as provider.
+For testing purposes, [Molecule](https://molecule.readthedocs.io/) with Docker as driver and [Goss](http://goss.rocks) as verifier.
+
+This role needs a system with java previously installed. Its really recommended the use of idealista's java role for that purpose: [idealista.java-role](https://github.com/idealista/java_role).
 
 ### Installing
 
@@ -53,15 +55,23 @@ Use in a playbook:
 
 ## Usage
 
-Look to the defaults properties file to see the possible configuration properties.
+Look to the [defaults](defaults/main.yml) properties file to see the possible configuration properties.
 
 ## Testing
 
-Execute ``` molecule test ``` under wildfly-role folder to run the automated tests suite.
+```sh
+pipenv sync
+pipenv shell
+```
+
+For more information read the [pipenv docs](https://docs.pipenv.org/).
+
 
 ## Built With
 
-![Ansible](https://img.shields.io/badge/ansible-2.3.1.0-green.svg)
+![Ansible](https://img.shields.io/badge/ansible-2.9.14-green.svg)
+![Molecule](https://img.shields.io/badge/molecule-3.0.4-green.svg)
+![Goss](https://img.shields.io/badge/goss-0.3.16-green.svg)
 
 ## Versioning
 

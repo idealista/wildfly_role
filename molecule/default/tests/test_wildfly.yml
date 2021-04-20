@@ -1,0 +1,17 @@
+---
+
+group:
+  wildfly:
+    exists: true
+
+user:
+  wildfly:
+    exists: true
+    groups:
+      - wildfly
+
+port:
+  tcp:8080:
+    listening: true
+    ip:
+    - 0.0.0.0

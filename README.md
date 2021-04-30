@@ -1,6 +1,6 @@
-![Logo](https://raw.githubusercontent.com/idealista/wildfly-role/master/logo.gif)
+![Logo](https://raw.githubusercontent.com/idealista/wildfly_role/master/logo.gif)
 
-# WildFly Ansible Role [![Build Status](https://travis-ci.com/idealista/wildfly-role.png)](https://travis-ci.com/idealista/wildfly-role)
+# WildFly Ansible Role [![Build Status](https://travis-ci.com/idealista/wildfly_role.png)](https://travis-ci.com/idealista/wildfly_role)
 
 This Ansible role installs a WildFly server in a Debian environment. Based on the instructions present in [this GitHub Gist](https://gist.github.com/sukharevd/6087988).
 
@@ -32,7 +32,7 @@ This role needs a system with java previously installed. Its really recommended 
 Create or add to your roles dependency file (e.g requirements.yml):
 
 ```
-- src: http://github.com/idealista/wildfly-role.git
+- src: http://github.com/idealista/wildfly_role.git
   scm: git
   version: 1.0.0
   name: wildfly
@@ -75,7 +75,7 @@ For more information read the [pipenv docs](https://docs.pipenv.org/).
 
 ## Versioning
 
-For the versions available, see the [tags on this repository](https://github.com/idealista/wildfly-role/tags).
+For the versions available, see the [tags on this repository](https://github.com/idealista/wildfly_role/tags).
 
 Additionaly you can see what change in each version in the [CHANGELOG.md](CHANGELOG.md) file.
 
@@ -83,7 +83,7 @@ Additionaly you can see what change in each version in the [CHANGELOG.md](CHANGE
 
 * **Idealista** - *Work with* - [idealista](https://github.com/idealista)
 
-See also the list of [contributors](https://github.com/idealista/wildfly-role/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/idealista/wildfly_role/contributors) who participated in this project.
 
 ## License
 

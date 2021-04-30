@@ -20,4 +20,3 @@ wildfly_management_users:
 
 ## JAVA
 java_jdk_vendor: openjdk
-java_open_jdk_version: 8u275-b01-1~deb9u1

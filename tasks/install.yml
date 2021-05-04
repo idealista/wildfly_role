@@ -14,6 +14,20 @@
     uid: "{{ wildfly_user_uid }}"
     state: present
 
+- name: WildFly | Create log path
+  file:
+    path: "{{ wildfly_log_file_path }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+
+- name: WildFly | Create home path
+  file:
+    path: "{{ wildfly_home_path }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+
 - name: WildFly | Check if service is running
   command: systemctl status wildfly.service
   ignore_errors: yes
@@ -21,48 +35,39 @@
   no_log: true
   register: service_wildfly_status
 
-- name: WildFly | Check installed version
+- name: WildFly | Check installed version (1/2)
   command: >
-    {{ wildfly_home_path }}/bin/jboss-cli.sh -c --commands=":read-attribute(name=product-version)"
-    --user={{ wildfly_management_users.0.name }} --password={{ wildfly_management_users.0.password }}
+    {{ wildfly_bin_path }}/jboss-cli.sh -c --commands=":read-attribute(name=product-version)"
   register: wildfly_check
   changed_when: false
   ignore_errors: true
   no_log: true
   when: service_wildfly_status is success
 
-- block:
-    - name: WildFly | Download WildFly binaries
-      get_url:
-        url: "{{ wildfly_url }}"
-        dest: "/tmp/{{ wildfly_package }}"
+- name: WildFly | Check installed version (2/2)
+  set_fact:
+    wildfly_check_version: "\"result\" => \"{{ wildfly_version }}\""
+  when:
+    - service_wildfly_status is success
+    - wildfly_check is defined
 
-    - name: WildFly | Extract wildfly in the install directory
-      unarchive:
-        copy: no
-        src: "/tmp/{{ wildfly_package }}"
-        dest: "{{ wildfly_install_path }}"
-        owner: "{{ wildfly_user }}"
-        group: "{{ wildfly_group }}"
-
-    - name: WildFly | Create Symlink to WildFly
-      file:
-        src: "{{ wildfly_install_path }}/{{ wildfly_package_name }}"
-        dest: "{{ wildfly_install_path }}/wildfly"
-        state: link
-        owner: "{{ wildfly_user }}"
-        group: "{{ wildfly_group }}"
-        force: True
+- name: WildFly | Download & extract wildfly
+  unarchive:
+    extra_opts: ['--strip-components=1']
+    src: "{{ wildfly_url }}"
+    remote_src: true
+    dest: "{{ wildfly_home_path }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0750
   when: |
       "Loaded: not-found" in service_wildfly_status.stdout or
       "service could not be found" in service_wildfly_status.stderr or
-      (service_wildfly_status is success and
-        (wildfly_check is failed or
-        "\"result\" => \"{{ wildfly_version }}\"" not in wildfly_check.stdout))
+      (wildfly_check_version is defined and wildfly_check_version not in wildfly_check.stdout)
 
-- name: WildFly | Create log path
-  file:
-    path: "{{ wildfly_log_file_path }}"
-    state: directory
-    owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
+- name: WildFly | Copy Daemon script
+  template:
+    src: wildfly.service.j2
+    dest: /lib/systemd/system/wildfly.service
+    mode: 0644
+  notify: restart WildFly

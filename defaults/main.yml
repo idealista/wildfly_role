@@ -13,23 +13,26 @@ wildfly_user_shell: "/bin/sh"
 wildfly_user_uid: 1005
 
 # start on boot
-wildfly_service_enabled: True
+wildfly_service_enabled: true
 # current state: started, stopped
 wildfly_service_state: started
 
 # Files & Paths
+wildfly_home_path: "/opt/wildfly"
+wildfly_bin_path: "{{ wildfly_home_path }}/bin"
 wildfly_conf_path: "/etc/wildfly"
-wildfly_install_path: "/opt"
-wildfly_home_path: "{{ wildfly_install_path }}/wildfly"
-wildfly_log_file_path: "{{ wildfly_home_path }}/standalone/log"
-wildfly_running_configuration_file: "{{ wildfly_home_path }}/bin/standalone.conf"
+wildfly_log_file_path: "/var/log/wildfly"
+wildfly_webapps_path: "{{ wildfly_home_path }}/standalone/deployments"
+wildfly_config_file_name: "standalone.xml"
 
 # Allowing playbooks to provide external config files&templates
+wildfly_standalone_conf_file_path: "{{ playbook_dir }}/files/wildfly/standalone"
+wildfly_standalone_conf_template_path: "{{ playbook_dir }}/templates/wildfly/standalone"
 wildfly_extra_conf_path: "{{ playbook_dir }}/files/wildfly/conf"
 wildfly_extra_conf_template_path: "{{ playbook_dir }}/templates/wildfly/conf"
 
 # Log
-wildfly_log_file_name: server.log
+wildfly_log_file_name: wildfly.log
 wildfly_log_console_enabled: "false"
 wildfly_log_console_level: INFO
 wildfly_log_file_enabled: "true"
@@ -38,7 +41,28 @@ wildfly_log_file_rotatesize: 1024000
 wildfly_log_file_maxBackupIndex: 7
 
 # Network
+wildfly_port: 8080
 wildfly_bind: 0.0.0.0
+wildfly_management_port: 9990
+wildfly_management_bind: 127.0.0.1
 
 # Management
-wildfly_management_users: []
+wildfly_management_users:
+  - name: admin
+    password: changeme
+
+# Service Options
+wildfly_nofile_limit: 102642
+
+# JVM
+wildfly_xmx: 512m
+wildfly_xms: 512m
+
+## Deploy
+wildfly_download_wars: false
+wildfly_war_to_deploy_urls:
+  - url: https://github.com/AKSarav/SampleWebApp/raw/master/dist/SampleWebApp.war
+    name: sample.war
+wildfly_local_wars: false
+wildfly_war_to_deploy_path:
+  - "{{ playbook_dir }}/sample.war"

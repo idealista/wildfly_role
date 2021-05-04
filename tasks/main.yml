@@ -3,19 +3,24 @@
 - name: WildFly | Install
   include: install.yml
   tags:
-    - install
+    - wildfly_install
 
 - name: WildFly | Configure
   include: config.yml
   tags:
-    - configure
-
-- name: WildFly | Users
-  include: users.yml
-  tags:
-    - users
+    - wildfly_configure
 
 - name: WildFly | Service
   include: service.yml
   tags:
-    - service
+    - wildfly_service
+
+- name: WildFly | Users
+  include: users.yml
+  tags:
+    - wildfly_users
+
+- name: WildFly | Deploy
+  import_tasks: deploy.yml
+  tags:
+    - wildfly_deploy

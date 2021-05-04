@@ -5,12 +5,12 @@ Before=httpd.service
 
 [Service]
 Environment=LAUNCH_JBOSS_IN_BACKGROUND=1
-EnvironmentFile=-{{ wildfly_conf_path }}/wildfly.conf
+EnvironmentFile={{ wildfly_conf_path }}/wildfly.conf
 User={{ wildfly_user }}
-LimitNOFILE=102642
-PIDFile=/var/run/wildfly/wildfly.pid
-ExecStart={{ wildfly_home_path }}/bin/launch.sh $WILDFLY_MODE $WILDFLY_CONFIG $WILDFLY_BIND $RUN_CONF
-StandardOutput=null
+LimitNOFILE={{ wildfly_nofile_limit }}
+PIDFile=/run/wildfly/wildfly.pid
+ExecStart={{ wildfly_bin_path }}/standalone.sh -c $WILDFLY_CONFIG -P $RUN_CONF
+#StandardOutput=null
 
 [Install]
 WantedBy=multi-user.target

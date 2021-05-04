@@ -1,4 +1,8 @@
 ---
+service:
+  wildfly:
+    enabled: true
+    running: true
 
 group:
   wildfly:
@@ -15,3 +19,37 @@ port:
     listening: true
     ip:
     - 0.0.0.0
+  tcp:9990:
+    listening: true
+    ip:
+    - 127.0.0.1
+
+file:
+  /opt/wildfly:
+    filetype: directory
+    exists: true
+    owner: wildfly
+    group: wildfly
+  /etc/wildfly:
+    filetype: directory
+    exists: true
+    owner: wildfly
+    group: wildfly
+  /etc/wildfly/wildfly.conf:
+    exists: true
+  /etc/wildfly/standalone.conf:
+    exists: true
+  /var/log/wildfly:
+    filetype: directory
+    exists: true
+    owner: wildfly
+  /opt/wildfly/standalone/deployments/sample.war:
+    exists: true
+  /opt/wildfly/standalone/deployments/sample.war.deployed:
+    exists: true
+
+command:
+  /opt/wildfly/bin/jboss-cli.sh -c --commands=":read-attribute(name=product-version)" | grep 'result':
+    exit-status: 0
+    stdout:
+      - "\"result\" => \"{{ wildfly_version }}\""

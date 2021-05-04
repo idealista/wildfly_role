@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a changelog](https://github.com/olivierlacan/keep-a-changelog).
 
 ## [Unreleased](https://github.com/idealista/wildfly_role/tree/develop)
+### Added
+- *[#32](https://github.com/idealista/wildfly_role/issues/32) Download apps to deploy* @jmonterrubio
+
 ### Changed
 - *[#30](https://github.com/idealista/wildfly_role/issues/30) Rename role using underscore* @jmonterrubio
 

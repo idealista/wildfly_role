@@ -21,6 +21,6 @@
     - wildfly_users
 
 - name: WildFly | Deploy
-  import_tasks: deploy.yml
+  include: deploy.yml
   tags:
     - wildfly_deploy

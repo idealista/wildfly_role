@@ -1,5 +1,7 @@
 ---
-wildfly_version: 10.1.0.Final
+wildfly_version: "10.1.0.Final"
+
+wildfly_port: 8080
 
 wildfly_user: wildfly
 wildfly_user_home: /home/wildfly
@@ -10,14 +12,11 @@ wildfly_user_uid: 1005
 wildfly_log_file_path: "/var/log/wildfly"
 wildfly_log_file_name: wildfly.log
 
-wildfly_running_configuration_file: "{{ wildfly_conf_path }}/standalone.conf"
-
 wildfly_management_users:
-  - {
-    name: admin,
+  - name: admin
     password: admin
-  }
+
+wildfly_download_wars: true
 
 ## JAVA
 java_jdk_vendor: openjdk
-java_open_jdk_version: 8u275-b01-1~deb9u1

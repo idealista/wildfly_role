@@ -4,4 +4,4 @@
   hosts: all
   roles:
     - role: java
-    - role: wildfly-role
+    - role: wildfly_role

@@ -14,7 +14,7 @@
 #
 # Defaults to "maximum"
 #
-MAX_FD="maximum"
+#MAX_FD="maximum"
 
 #
 # Specify the profiler configuration file to load.
@@ -38,16 +38,37 @@ if [ "x$JBOSS_MODULES_SYSTEM_PKGS" = "x" ]; then
    JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman"
 fi
 
+
 # Uncomment the following line to prevent manipulation of JVM options
 # by shell scripts.
 #
 PRESERVE_JAVA_OPTS=true
 
+# Sample JPDA settings for remote socket debugging
+#JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_socket,address=8787,server=y,suspend=n"
+
+# Sample JPDA settings for shared memory debugging
+#JAVA_OPTS="$JAVA_OPTS -agentlib:jdwp=transport=dt_shmem,server=y,suspend=n,address=jboss"
+
+# Uncomment to not use JBoss Modules lockless mode
+#JAVA_OPTS="$JAVA_OPTS -Djboss.modules.lockless=false"
+
+# Uncomment to gather JBoss Modules metrics
+#JAVA_OPTS="$JAVA_OPTS -Djboss.modules.metrics=true"
+
+# Uncomment this to run with a security manager enabled
+# SECMGR="true"
+
+# Uncomment this in order to be able to run WildFly on FreeBSD
+# when you get "epoll_create function not implemented" message in dmesg output
+#JAVA_OPTS="$JAVA_OPTS -Djava.nio.channels.spi.SelectorProvider=sun.nio.ch.PollSelectorProvider"
+
 # Sample JAVA_OPTS setting Xms/Xmx
-JAVA_OPTS="$JAVA_OPTS -Xms512m -Xmx512m"
+JAVA_OPTS="$JAVA_OPTS -Xms{{ wildfly_xms }} -Xmx{{ wildfly_xmx }}"
 JAVA_OPTS="$JAVA_OPTS -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true"
 JAVA_OPTS="$JAVA_OPTS -Djboss.modules.system.pkgs=$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true -Djavax.accessibility.assistive_technologies=\" \""
 
-
 jboss.http.port={{ wildfly_port }}
 jboss.bind.address={{ wildfly_bind }}
+jboss.management.http.port={{ wildfly_management_port }}
+jboss.bind.address.management={{ wildfly_management_bind }}

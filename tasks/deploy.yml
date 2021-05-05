@@ -1,0 +1,24 @@
+---
+
+- name: WilfFly | Download wars on webapps
+  get_url:
+    url: "{{ item.url }}"
+    dest: "{{ wildfly_webapps_path }}/{{ item.name }}"
+    mode: 0755
+    validate_certs: false
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    username: "{{ item.url_username | default(omit) }}"
+    password: "{{ item.url_password | default(omit) }}"
+  with_items: "{{ wildfly_war_to_deploy_urls }}"
+  when: wildfly_download_wars
+
+- name: WilfFly | Copy local wars to webapps
+  copy:
+    src: "{{ item }}"
+    dest: "{{ wildfly_webapps_path }}"
+    mode: 0755
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  with_items: "{{ wildfly_war_to_deploy_path }}"
+  when: wildfly_local_wars

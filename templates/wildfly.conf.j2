@@ -1,13 +1,5 @@
 # The configuration you want to run
-WILDFLY_CONFIG=standalone.xml
-
-# The mode you want to run
-WILDFLY_MODE=standalone
-
-# The address to bind to
-WILDFLY_BIND={{ wildfly_bind }}
+WILDFLY_CONFIG={{ wildfly_config_file_name }}
 
 # To set an optional running configuration file
-RUN_CONF={{ wildfly_running_configuration_file }}
-
-# To prepend some JAVA_OPTS
+RUN_CONF={{ wildfly_conf_path}}/standalone.conf

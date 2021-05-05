@@ -10,47 +10,43 @@
   with_items:
     - "{{ wildfly_conf_path }}"
 
-- name: WildFly | Copy wildfly config
+- name: WildFly | Set custom files var
+  find:
+    paths: "{{ wildfly_extra_conf_path }}"
+    file_type: file
+  delegate_to: localhost
+  become: false
+  register: wildfly_custom_files_to_copy
+
+- name: WildFly | Set custom file names var
+  set_fact:
+    wildfly_custom_files_to_copy_names: "{{ wildfly_custom_files_to_copy.files | map(attribute='path') |  map('basename') | list }}"
+
+- name: WildFly | Set custom templates var
+  find:
+    paths: "{{ wildfly_extra_conf_template_path }}"
+    file_type: file
+  delegate_to: localhost
+  become: false
+  register: wildfly_custom_templates_to_copy
+
+- name: WildFly | Set custom template names var
+  set_fact:
+    wildfly_custom_templates_to_copy_names: "{{ wildfly_custom_templates_to_copy.files | map(attribute='path') |  map('basename') | map('splitext') | map('first') | list }}"
+
+- name: WildFly | Set default templates var
+  set_fact:
+    wildfly_default_templates_to_copy: "{{ wildfly_default_templates | difference(wildfly_custom_files_to_copy_names) | difference(wildfly_custom_templates_to_copy_names) }}"
+
+- name: WildFly | Copy wildfly default config
   template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.permissions }}"
-    owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
-  with_items:
-    - { src: "wildfly.conf.j2",
-        dest: "{{ wildfly_conf_path }}/wildfly.conf",
-        permissions: "0640" }
-    - { src: "standalone.xml.j2",
-        dest: "{{ wildfly_home_path }}/standalone/configuration/standalone.xml",
-        permissions: "0644" }
-  notify: restart WildFly
-
-- name: WildFly | Copy local files
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: "{{ item.permissions }}"
-    owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
-    remote_src: yes
-  with_items:
-    - { src: "{{ wildfly_home_path }}/docs/contrib/scripts/systemd/launch.sh",
-        dest: "{{ wildfly_home_path }}/bin/launch.sh",
-        permissions: "0755" }
-  notify: restart WildFly
-
-- name: WildFly | Ensure extra wildfly config file and template paths exists
-  file:
-    path: "{{ wildfly_conf_path }}/{{ item.path }}"
-    state: directory
-    owner: "{{ wildfly_user }}"
-    group: "{{ wildfly_group }}"
+    src: "{{ item }}.j2"
+    dest: "{{ wildfly_conf_path }}/{{ item }}"
     mode: 0640
-  with_filetree:
-    - "{{ wildfly_extra_conf_path }}/"
-    - "{{ wildfly_extra_conf_template_path }}/"
-  when: item.state == "directory"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  with_items: "{{ wildfly_default_templates_to_copy }}"
+  notify: restart WildFly
 
 - name: WildFly | Copy extra wildfly config files (provided by playbooks)
   copy:
@@ -76,9 +72,34 @@
   when: item.state == "file"
   notify: restart WildFly
 
-- name: WildFly | Copy Daemon script
+- name: WildFly | Check standalone wildfly file (provided by playbooks)
+  stat:
+    path: "{{ wildfly_standalone_conf_file_path }}/{{ wildfly_config_file_name }}"
+  delegate_to: localhost
+  register: wildfly_standalone_file_stat
+
+- name: WildFly | Copy standalone wildfly file (provided by playbooks)
+  copy:
+    src: "{{ wildfly_standalone_conf_file_path }}/{{ wildfly_config_file_name }}"
+    dest: "{{ wildfly_home_path }}/standalone/configuration/{{ wildfly_config_file_name }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0640
+  when: wildfly_standalone_file_stat.stat.exists
+  notify: restart WildFly
+
+- name: WildFly | Check standalone wildfly template (provided by playbooks)
+  stat:
+    path: "{{ wildfly_standalone_conf_template_path }}/{{ wildfly_config_file_name }}.j2"
+  delegate_to: localhost
+  register: wildfly_standalone_template_stat
+
+- name: WildFly | Copy standalone wildfly template (provided by playbooks)
   template:
-    src: wildfly.service.j2
-    dest: /lib/systemd/system/wildfly.service
-    mode: 0644
+    src: "{{ wildfly_standalone_conf_template_path }}/{{ wildfly_config_file_name }}.j2"
+    dest: "{{ wildfly_home_path }}/standalone/configuration/{{ wildfly_config_file_name }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0640
+  when: wildfly_standalone_template_stat.stat.exists
   notify: restart WildFly

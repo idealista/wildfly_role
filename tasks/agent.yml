@@ -1,0 +1,106 @@
+---
+
+- name: WildFly | agent installation | Install required packages
+  apt:
+    pkg: "{{ wildfly_agents_required_libs }}"
+    state: present
+    update_cache: yes
+  when: wildfly_agents_required_libs is defined
+
+- name: WildFly | agent installation | Ensure install path
+  file:
+    path: "{{ wildfly_home_path }}/{{ item.name }}"
+    state: directory
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  with_items: '{{ wildfly_agents_config }}'
+
+- name: WildFly | agent installation | Check if agent is installed
+  stat:
+    path: "{{ wildfly_home_path }}/{{ item.0.name }}/{{ item.1 | basename }}"
+  register: agent_file_exists
+  with_subelements:
+    - "{{ wildfly_agents_config }}"
+    - java_opts
+
+- name: WildFly | agent installation | Check agent version
+  command: "cat {{ wildfly_home_path }}/{{ item.0.name }}/version.txt"
+  register: agent_version_checked
+  changed_when: false
+  ignore_errors: true
+  with_subelements:
+    - "{{ wildfly_agents_config }}"
+    - java_opts
+
+- name: WildFly | agent installation | Download agent
+  get_url:
+    dest: "/tmp"
+    url: "{{ item.download_url }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: '666'
+  register: agent_downloaded
+  loop: "{{ wildfly_agents_config|flatten(levels=1) }}"
+  loop_control:
+    index_var: index
+  when: >
+   item.download_url | basename | splitext | last in wildfly_supported_agents_extensions and
+    (wildfly_agents_force_reinstall or not
+    agent_file_exists.results[index].stat.exists or
+    item.version != agent_version_checked.results[index].stdout)
+
+- name: WildFly | agent installation | Unarchive package
+  unarchive:
+    src: "/tmp/{{ item.download_url | basename }}"
+    dest: "{{ wildfly_install_path }}"
+    remote_src: true
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0755
+  when: item.download_url | basename | splitext | last in wildfly_supported_agents_extensions and agent_downloaded.changed
+  with_items: '{{ wildfly_agents_config }}'
+  tags:
+    - skip_ansible_lint
+
+- name: WildFly | agent installation | Download agent jar
+  get_url:
+    dest: "{{ wildfly_home_path }}/{{ item.name }}"
+    url: "{{ item.download_url }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  loop: '{{ wildfly_agents_config | flatten(levels=1) }}'
+  register: agent_jar_downloaded
+  when: item.download_url | basename | splitext | last not in wildfly_supported_agents_extensions
+
+- name: WildFly | agent installation | Copy version number file
+  template:
+    src: "agents/version.txt.j2"
+    dest: "{{ wildfly_home_path }}/{{ item.name }}/version.txt"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+    mode: 0644
+  with_items: '{{ wildfly_agents_config }}'
+
+- name: WildFly | agent installation | Check configuration files
+  set_fact:
+    wildfly_agent_configuration: "{{ wildfly_agent_configuration|default([]) + [ {'name': item.0.name, 'file': item.1, 'params': item.0.params}] }}"
+  with_subelements:
+    - "{{ wildfly_agents_config }}"
+    - configuration_files
+
+- name: WildFly | agent installation | Configure the Java agent
+  template:
+    src: "{{ playbook_dir }}/templates/wildfly/agents/{{ item.name }}/{{ item.file }}.j2"
+    dest: "{{ wildfly_home_path }}/{{ item.name }}/{{ item.file }}"
+    owner: "{{ wildfly_user }}"
+    group: "{{ wildfly_group }}"
+  notify: restart WildFly
+  with_items:
+    - "{{ wildfly_agent_configuration }}"
+
+- name: WildFly | agent installation | Check java options
+  set_fact:
+    wildfly_agent_java_opts: "{% set wildfly_agent_java_opts = wildfly_agent_java_opts|default([]) + [item.1] %}{{ wildfly_agent_java_opts|list }}"
+  with_subelements:
+    - "{{ wildfly_agents_config }}"
+    - java_opts

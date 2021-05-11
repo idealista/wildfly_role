@@ -67,6 +67,12 @@ PRESERVE_JAVA_OPTS=true
 JAVA_OPTS="$JAVA_OPTS -Xms{{ wildfly_xms }} -Xmx{{ wildfly_xmx }}"
 JAVA_OPTS="$JAVA_OPTS -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true"
 JAVA_OPTS="$JAVA_OPTS -Djboss.modules.system.pkgs=$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true -Djavax.accessibility.assistive_technologies=\" \""
+{% if wildfly_agent_java_opts is defined %}
+{% for option in wildfly_agent_java_opts %}
+JAVA_OPTS="$JAVA_OPTS {{ option }}"
+{% endfor %}
+{% endif%}
+
 
 jboss.http.port={{ wildfly_port }}
 jboss.bind.address={{ wildfly_bind }}

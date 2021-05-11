@@ -35,7 +35,7 @@ MAX_FD="maximum"
 #JAVA=""
 
 if [ "x$JBOSS_MODULES_SYSTEM_PKGS" = "x" ]; then
-   JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman"
+   JBOSS_MODULES_SYSTEM_PKGS="org.jboss.byteman,org.jboss.logmanager"
 fi
 
 # Uncomment the following line to prevent manipulation of JVM options
@@ -47,7 +47,13 @@ PRESERVE_JAVA_OPTS=true
 JAVA_OPTS="$JAVA_OPTS -Xms512m -Xmx512m"
 JAVA_OPTS="$JAVA_OPTS -XX:MetaspaceSize=96M -XX:MaxMetaspaceSize=256m -Djava.net.preferIPv4Stack=true"
 JAVA_OPTS="$JAVA_OPTS -Djboss.modules.system.pkgs=$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true -Djavax.accessibility.assistive_technologies=\" \""
-
+JAVA_OPTS="$JAVA_OPTS -Xbootclasspath/p:/opt/wildfly/modules/system/layers/base/org/jboss/logmanager/main/jboss-logmanager-2.0.4.Final.jar"
+JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+{% if wildfly_agent_java_opts is defined %}
+{% for option in wildfly_agent_java_opts %}
+JAVA_OPTS="$JAVA_OPTS {{ option }}"
+{% endfor %}
+{% endif%}
 
 jboss.http.port={{ wildfly_port }}
 jboss.bind.address={{ wildfly_bind }}

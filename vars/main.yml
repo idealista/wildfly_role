@@ -7,3 +7,10 @@ wildfly_url: "http://download.jboss.org/wildfly/{{ wildfly_version }}/{{ wildfly
 wildfly_default_templates:
   - wildfly.conf
   - standalone.conf
+
+wildfly_supported_agents_extensions:
+  - '.zip'
+  - '.tar'
+  - '.tar.gz'
+  - '.tar.bz2'
+  - '.tar.xz'

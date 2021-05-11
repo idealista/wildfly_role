@@ -23,6 +23,10 @@ port:
     listening: true
     ip:
     - 127.0.0.1
+  tcp:9110:
+    listening: true
+    ip:
+    - 0.0.0.0
 
 file:
   /opt/wildfly:
@@ -53,3 +57,9 @@ command:
     exit-status: 0
     stdout:
       - "\"result\" => \"{{ wildfly_version }}\""
+
+http:
+  http://localhost:9110/metrics:
+    status: 200
+    body:
+      - "jmx_scrape_error 0.0"

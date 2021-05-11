@@ -18,5 +18,15 @@ wildfly_management_users:
 
 wildfly_download_wars: true
 
+wildfly_agents_config:
+  - name: "prometheus"
+    download_url: "https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.3.1/jmx_prometheus_javaagent-0.3.1.jar"
+    version: "0.3.1"
+    java_opts:
+      - "-javaagent:{{ wildfly_home_path }}/prometheus/jmx_prometheus_javaagent-0.3.1.jar=9110:{{ wildfly_home_path }}/prometheus/jmx_config.yml"
+    configuration_files:
+      - "jmx_config.yml"
+    params: []
+
 ## JAVA
 java_jdk_vendor: openjdk

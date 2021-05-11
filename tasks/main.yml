@@ -5,6 +5,12 @@
   tags:
     - wildfly_install
 
+- name: WildFly | Agents
+  include: agent.yml
+  tags:
+    - wildfly_agents
+  when: wildfly_agents_config is defined
+
 - name: WildFly | Configure
   include: config.yml
   tags:

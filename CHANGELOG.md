@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a changelog](https://github.com/olivierlacan/keep-a-changelog).
 
 ## [Unreleased](https://github.com/idealista/wildfly_role/tree/develop)
+## [1.6.1](https://github.com/idealista/wildfly_role/tree/1.6.0) (2021-05-18)
+[Full Changelog](https://github.com/idealista/wildfly_role/compare/1.6.0...1.6.1)
+### Fixed
+- *[#38](https://github.com/idealista/wildfly_role/issues/38) Fix sudo error while checking local config files* @jmonterrubio
+
 ## [1.6.0](https://github.com/idealista/wildfly_role/tree/1.6.0) (2021-05-11)
 [Full Changelog](https://github.com/idealista/wildfly_role/compare/1.5.0...1.6.0)
 ### Added

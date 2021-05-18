@@ -76,6 +76,7 @@
   stat:
     path: "{{ wildfly_standalone_conf_file_path }}/{{ wildfly_config_file_name }}"
   delegate_to: localhost
+  become: false
   register: wildfly_standalone_file_stat
 
 - name: WildFly | Copy standalone wildfly file (provided by playbooks)
@@ -92,6 +93,7 @@
   stat:
     path: "{{ wildfly_standalone_conf_template_path }}/{{ wildfly_config_file_name }}.j2"
   delegate_to: localhost
+  become: false
   register: wildfly_standalone_template_stat
 
 - name: WildFly | Copy standalone wildfly template (provided by playbooks)

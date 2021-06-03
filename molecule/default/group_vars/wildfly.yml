@@ -27,6 +27,19 @@ wildfly_agents_config:
     configuration_files:
       - "jmx_config.yml"
     params: []
+  - name: "glowroot"
+    download_url: "https://github.com/glowroot/glowroot/releases/download/v0.13.6/glowroot-0.13.6-dist.zip"
+    java_opts:
+      - '-javaagent:{{ wildfly_home_path }}/glowroot/glowroot.jar'
+    version: "0.13.6"
+    configuration_files:
+      - "glowroot.properties"
+    params:
+      id: "{{ inventory_hostname }}"
+      central_collector:
+
+wildfly_agents_required_libs:
+  - unzip
 
 ## JAVA
 java_jdk_vendor: openjdk

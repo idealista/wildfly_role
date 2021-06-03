@@ -52,7 +52,7 @@
 - name: WildFly | agent installation | Unarchive package
   unarchive:
     src: "/tmp/{{ item.download_url | basename }}"
-    dest: "{{ wildfly_install_path }}"
+    dest: "{{ wildfly_home_path }}"
     remote_src: true
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"

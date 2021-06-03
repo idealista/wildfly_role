@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a ch
 
 ## [Unreleased](https://github.com/idealista/wildfly_role/tree/develop)
 ### Fixed
-- *[#42](https://github.com/idealista/wildfly_role/issues/42) Fix undefined variable for archived agents* @vsuarez
+- *[#42](https://github.com/idealista/wildfly_role/issues/42) Fix undefined variable for archived agents* @vicsufer
 ## [1.6.1](https://github.com/idealista/wildfly_role/tree/1.6.0) (2021-05-18)
 [Full Changelog](https://github.com/idealista/wildfly_role/compare/1.6.0...1.6.1)
 ### Fixed

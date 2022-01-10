@@ -4,10 +4,10 @@ This project adheres to [Semantic Versioning](http://semver.org/) and [Keep a ch
 
 ## [Unreleased](https://github.com/idealista/wildfly_role/tree/develop)
 ### Added
-- *[#44](https://github.com/idealista/wildfly_role/issues/44) Add log4shell prevention flag by default* @vsuarez
+- *[#44](https://github.com/idealista/wildfly_role/issues/44) Add log4shell prevention flag by default* @vicsufer
 ### Changed
-- *[#45](https://github.com/idealista/wildfly_role/issues/45) Upgrade role dev dependencies* @vsuarez
-- *[#45](https://github.com/idealista/wildfly_role/issues/45) Dropped debian8 (jessie) support in favour of debian11 (bullseye)* @vsuarez
+- *[#45](https://github.com/idealista/wildfly_role/issues/45) Upgrade role dev dependencies* @vicsufer
+- *[#45](https://github.com/idealista/wildfly_role/issues/45) Dropped debian8 (jessie) support in favour of debian11 (bullseye)* @vicsufer
 
 ## [1.6.2](https://github.com/idealista/wildfly_role/tree/1.6.0) (2021-06-03)
 [Full Changelog](https://github.com/idealista/wildfly_role/compare/1.6.1...1.6.2)

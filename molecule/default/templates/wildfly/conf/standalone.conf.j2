@@ -54,6 +54,8 @@ JAVA_OPTS="$JAVA_OPTS -Djava.util.logging.manager=org.jboss.logmanager.LogManage
 JAVA_OPTS="$JAVA_OPTS {{ option }}"
 {% endfor %}
 {% endif%}
+# Prevent log4shell
+JAVA_OPTS="$JAVA_OPTS -Dlog4j2.formatMsgNoLookups=true -Djava.security.egd=file:///dev/urandom"
 
 jboss.http.port={{ wildfly_port }}
 jboss.bind.address={{ wildfly_bind }}

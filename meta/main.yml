@@ -1,5 +1,7 @@
 ---
 galaxy_info:
+  role_name: wildfly_role
+  namespace: idealista
   company: Idealista S.A.U.
   author: Idealista S.A.U.
   description: wildfly role to install and configure this server
@@ -8,7 +10,7 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
-        - jessie
+        - bullseye
         - stretch
   galaxy_tags:
     - container

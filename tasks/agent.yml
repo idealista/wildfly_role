@@ -13,7 +13,6 @@
     state: directory
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
-    mode: 0666
   with_items: '{{ wildfly_agents_config }}'
 
 - name: WildFly | agent installation | Check if agent is installed
@@ -39,7 +38,7 @@
     url: "{{ item.download_url }}"
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
-    mode: 0666
+    mode: '666'
   register: agent_downloaded
   loop: "{{ wildfly_agents_config|flatten(levels=1) }}"
   loop_control:
@@ -95,7 +94,6 @@
     dest: "{{ wildfly_home_path }}/{{ item.name }}/{{ item.file }}"
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
-    mode: 0644
   notify: restart WildFly
   with_items:
     - "{{ wildfly_agent_configuration }}"

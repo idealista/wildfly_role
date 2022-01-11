@@ -12,7 +12,7 @@ platforms:
   - name: wildfly
     groups:
       - wildfly
-    image: ${MOLECULE_DISTRO:-idealista/jdk:8u252-stretch-openjdk-headless}
+    image: ${MOLECULE_DISTRO:-idealista/jdk:8u292-bullseye-adoptopenjdk-headless}
     privileged: false
     command: '/lib/systemd/systemd'
     capabilities:

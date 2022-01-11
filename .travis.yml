@@ -10,7 +10,7 @@ install:
 env:
   jobs:
     - MOLECULE_DISTRO=idealista/jdk:8u252-stretch-openjdk-headless
-    - MOLECULE_DISTRO=idealista/jdk:8u922-bullseye-adoptopenjdk-headless
+    - MOLECULE_DISTRO=idealista/jdk:8u292-bullseye-adoptopenjdk-headless
 script:
   - pipenv run molecule test
 

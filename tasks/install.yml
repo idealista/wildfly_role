@@ -20,6 +20,7 @@
     state: directory
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
+    mode: 0644
 
 - name: WildFly | Create home path
   file:
@@ -27,6 +28,7 @@
     state: directory
     owner: "{{ wildfly_user }}"
     group: "{{ wildfly_group }}"
+    mode: 0600
 
 - name: WildFly | Check if service is running
   command: systemctl status wildfly.service
